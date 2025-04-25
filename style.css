@@ -1,0 +1,9 @@
+.card-container{
+    
+    min-height: 100vh;
+    background-color: #47178F !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
