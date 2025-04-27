@@ -23,3 +23,14 @@
     background-color: rgb(72, 72, 221);
     color: aliceblue;
 }
+.width-100{
+    width: 100%;
+
+}
+.text-center{
+    text-align: center;
+}
+
+.bg-success,.bg-danger{
+    color: white;
+}

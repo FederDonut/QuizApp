@@ -84,6 +84,7 @@ let questions = [
 ];
 
 let currentQuestion =0;
+let rightQuestions =0;
 
 function init(){
     document.getElementById('question-count').innerHTML = questions.length;
@@ -91,6 +92,17 @@ function init(){
 }
 
 function showQuestion(){
+  // show endscreen
+  if(currentQuestion >= questions.length){
+    document.getElementById('endScreen').style="";
+    document.getElementById('quizbody').style = "display: none";
+    document.getElementById('all-questions').innerHTML= questions.length;
+    document.getElementById('right-answer').innerHTML = rightQuestions;
+    document.getElementById('header-img').style ="display: none";
+
+  }else{
+    //show question
+    simpleMath();
     let question = questions[currentQuestion];
     document.getElementById('questiontext').innerHTML = question['frage'];
 
@@ -98,19 +110,76 @@ function showQuestion(){
     document.getElementById('answer_2').innerHTML=question['antwort_2'];
     document.getElementById('answer_3').innerHTML=question['antwort_3'];
     document.getElementById('answer_4').innerHTML=question['antwort_4'];
-
+  }
 }
 
 function answer(selection){
-    let question = questions[currentQuestion];
-    console.log('Antwort ist ',selection);
-    let selectedQuestionNumber = selection.slice(-1);
-    console.log(Number(selectedQuestionNumber));
-    console.log('Current question is', question['richtige_antwort_index']);
+  let question = questions[currentQuestion];
+  //console.log('Antwort ist ',selection);
+  let selectedQuestionNumber = selection.slice(-1);
+  console.log(Number(selectedQuestionNumber));
+  console.log('Current question is', question['richtige_antwort_index']);
 
-    if(selectedQuestionNumber== question['richtige_antwort_index']){
-        console.log('richtig');
-    }else{
-        console.log('falsch');
-    }
+  let idOfRightAnswer = `answer_${question.richtige_antwort_index}`;
+  console.log(idOfRightAnswer);
+  
+  if(selectedQuestionNumber== question['richtige_antwort_index']){
+      //console.log('richtig');
+      document.getElementById(selection).parentNode.classList.add('bg-success');
+      rightQuestions ++;
+  }else{
+      //console.log('falsch');
+      document.getElementById(selection).parentNode.classList.add('bg-danger');
+      document.getElementById(idOfRightAnswer).parentNode.classList.add('bg-success');
+      
+  }
+  document.getElementById('next-button').disabled = false;
+}
+
+function disabledBtn(){
+
+  let next = document.getElementById('next-button');
+  next.disabled =false;
+}
+
+function nextQuestion(selection){
+  currentQuestion ++;
+  let count =document.getElementById('actual-count');
+  count.innerText =currentQuestion +1;
+  showQuestion();
+  document.getElementById('next-button').disabled = true;
+  resetAnswerButtons();
+}
+
+function resetAnswerButtons(){
+  document.getElementById('answer_1').parentNode.classList.remove('bg-danger');
+  document.getElementById('answer_1').parentNode.classList.remove('bg-success');
+  document.getElementById('answer_2').parentNode.classList.remove('bg-danger');
+  document.getElementById('answer_2').parentNode.classList.remove('bg-success');
+  document.getElementById('answer_3').parentNode.classList.remove('bg-danger');
+  document.getElementById('answer_3').parentNode.classList.remove('bg-success');
+  document.getElementById('answer_4').parentNode.classList.remove('bg-danger');
+  document.getElementById('answer_4').parentNode.classList.remove('bg-success');
+}
+
+function simpleMath(){
+  
+  let percent = (currentQuestion + 1) /questions.length;
+  percent =percent *100;
+  document.getElementById('progress-bar').innerHTML = `${percent} %`;
+  document.getElementById('progress-bar').style = `width: ${percent}%`;
+
+}
+
+function newGame(){
+  document.getElementById('header-img').src = '/assets/img/Ai-Quiz.jpeg'
+  document.getElementById('actual-count').innerText = 1;
+  
+  rightQuestions = 0;
+  currentQuestion = 0;
+  document.getElementById('header-img').style = "";
+  document.getElementById('quizbody').style = "";
+  document.getElementById('endScreen').style = "display: none";
+  init();
+
 }

@@ -25,8 +25,27 @@
 
         <div class="card-container">
           <div class="card quiz-card">
-            <img src="./assets/img/Ai-Quiz.jpeg" class="card-img-top" >
-            <div class="card-body">
+            <img src="./assets/img/Ai-Quiz.jpeg" id="header-img" class="card-img-top" >
+            
+            <div class="progress">
+              <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 0%;">25%</div>
+            </div>
+
+            <div class="card-body" id="endScreen" style="display: none;">
+                <div class="text-center">Quiz beendet !</div>
+
+                <div ><img src="./assets/img/gewonnen.png" class="width-100"></div>
+
+                <div class="text-center">
+                  Du hast <b id="right-answer"></b> Fragen von <b id="all-questions"></b> Fragen richtig beantwortet
+                </div>
+
+                <button onclick="newGame()" id="restart-button" class="btn btn-outline-primary">Erneut spielen</button>
+
+
+            </div>
+
+            <div class="card-body" id="quizbody">
               <h5 class="card-title" id="questiontext">Frage</h5>
               
               <div class="card mb-2" onclick="answer('answer_1')">
@@ -51,9 +70,9 @@
               </div>
               <div class="question-footer">
                 <span>
-                  <b>1</b> von <b id="question-count">5</b> Fragen
+                  <b id="actual-count">1</b> von <b id="question-count">5</b> Fragen
                 </span>
-                <button type="button" class="btn btn-outline-primary">Nächste Frage</button>
+                <button onclick="nextQuestion()" id="next-button" class="btn btn-outline-primary">Nächste Frage</button>
 
               </div>
 
