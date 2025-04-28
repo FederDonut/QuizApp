@@ -85,64 +85,74 @@ let questions = [
 
 let currentQuestion =0;
 let rightQuestions =0;
+let audioSucces = new Audio('assets/sounds/success-1-6297.mp3');
+let audioFail = new Audio('assets/sounds/fail-144746.mp3');
 
 function init(){
     document.getElementById('question-count').innerHTML = questions.length;
     showQuestion();
+    document.getElementById('next-button').disabled = true;
+    simpleMath();
+    
 }
 
 function showQuestion(){
-  // show endscreen
   if(currentQuestion >= questions.length){
+    showEndscreen();
+  }else{
+    simpleMath();
+    showNextQuestion();
+  }
+}
+
+function showEndscreen(){
     document.getElementById('endScreen').style="";
     document.getElementById('quizbody').style = "display: none";
     document.getElementById('all-questions').innerHTML= questions.length;
     document.getElementById('right-answer').innerHTML = rightQuestions;
     document.getElementById('header-img').style ="display: none";
+}
 
-  }else{
-    //show question
-    simpleMath();
-    let question = questions[currentQuestion];
-    document.getElementById('questiontext').innerHTML = question['frage'];
-
-    document.getElementById('answer_1').innerHTML=question['antwort_1'];
-    document.getElementById('answer_2').innerHTML=question['antwort_2'];
-    document.getElementById('answer_3').innerHTML=question['antwort_3'];
-    document.getElementById('answer_4').innerHTML=question['antwort_4'];
-  }
+function showNextQuestion(){
+  let question = questions[currentQuestion];
+  document.getElementById('questiontext').innerHTML = question['frage'];
+  document.getElementById('answer_1').innerHTML=question['antwort_1'];
+  document.getElementById('answer_2').innerHTML=question['antwort_2'];
+  document.getElementById('answer_3').innerHTML=question['antwort_3'];
+  document.getElementById('answer_4').innerHTML=question['antwort_4'];
 }
 
 function answer(selection){
   let question = questions[currentQuestion];
-  //console.log('Antwort ist ',selection);
   let selectedQuestionNumber = selection.slice(-1);
-  console.log(Number(selectedQuestionNumber));
-  console.log('Current question is', question['richtige_antwort_index']);
-
   let idOfRightAnswer = `answer_${question.richtige_antwort_index}`;
   console.log(idOfRightAnswer);
-  
   if(selectedQuestionNumber== question['richtige_antwort_index']){
-      //console.log('richtig');
-      document.getElementById(selection).parentNode.classList.add('bg-success');
-      rightQuestions ++;
+      trueAnswer(selection);
   }else{
-      //console.log('falsch');
-      document.getElementById(selection).parentNode.classList.add('bg-danger');
-      document.getElementById(idOfRightAnswer).parentNode.classList.add('bg-success');
-      
+      wrongAnswer(selection,idOfRightAnswer);
   }
-  document.getElementById('next-button').disabled = false;
+    document.getElementById('next-button').disabled = false;
 }
 
-function disabledBtn(){
+function trueAnswer(selection){
+    document.getElementById(selection).parentNode.classList.add('bg-success');
+    rightQuestions ++;
+    audioSucces.play();
+};
 
+function wrongAnswer(selection,idOfRightAnswer){
+  document.getElementById(selection).parentNode.classList.add('bg-danger');
+  document.getElementById(idOfRightAnswer).parentNode.classList.add('bg-success');
+  audioFail.play();
+};
+
+function disabledBtn(){
   let next = document.getElementById('next-button');
   next.disabled =false;
 }
 
-function nextQuestion(selection){
+function nextQuestion(){
   currentQuestion ++;
   let count =document.getElementById('actual-count');
   count.innerText =currentQuestion +1;
@@ -164,7 +174,7 @@ function resetAnswerButtons(){
 
 function simpleMath(){
   
-  let percent = (currentQuestion + 1) /questions.length;
+  let percent = (currentQuestion +1 ) /questions.length;
   percent =percent *100;
   document.getElementById('progress-bar').innerHTML = `${percent} %`;
   document.getElementById('progress-bar').style = `width: ${percent}%`;
@@ -174,7 +184,6 @@ function simpleMath(){
 function newGame(){
   document.getElementById('header-img').src = '/assets/img/Ai-Quiz.jpeg'
   document.getElementById('actual-count').innerText = 1;
-  
   rightQuestions = 0;
   currentQuestion = 0;
   document.getElementById('header-img').style = "";
